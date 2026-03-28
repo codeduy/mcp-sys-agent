@@ -1,0 +1,34 @@
+{
+    "mcpServers": {
+        "a1": {
+            "command": "sshpass",
+            "args": [
+                "-p",
+                "12345678",
+                "ssh",
+                "-p",
+                "2222",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "root@10.8.5.249",
+                "/opt/run-safe.sh /opt/mcp-rescue-linux"
+            ],
+            "disabled": false
+        },
+        "a2": {
+            "command": "sshpass",
+            "args": [
+                "-p",
+                "12345678",
+                "ssh",
+                "-p",
+                "2224",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "root@10.8.5.249",
+                "/opt/run-safe.sh /opt/mcp-rescue-linux"
+            ],
+            "disabled": false
+        }
+    }
+}
