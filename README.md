@@ -8,7 +8,7 @@ graph TD
     Client["MCP Client<br>(Google Antigravity)"]
 
     subgraph VPN ["Inside Tailscale VPN"]
-        Agent["runsafe.sh + MCP Server<br>(agent main.go)"]
+        Agent["run-sandbox.sh + MCP Server<br>(agent main.go)"]
         OS["OS / Bash"]
         LocalLLM["Local LLM"]
 
