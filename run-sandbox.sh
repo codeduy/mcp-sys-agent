@@ -12,7 +12,7 @@ fi
 shift 
 
 # Virtual IP of LLM Server (Tailscale)
-TAILSCALE_AI_IP="100.80.20.10"
+TAILSCALE_AI_IP="100.108.61.12"
 
 # Execute the Agent via systemd-run with MAXIMUM SECURITY CONSTRAINTS
 sudo systemd-run \

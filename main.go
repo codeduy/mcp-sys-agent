@@ -55,10 +55,15 @@ func shannonEntropy(data string) float64 {
 // ==========================================
 // [ZERO-TRUST PATCH]: LOCAL LLM INTEGRATION
 // ==========================================
+type OllamaOptions struct {
+	Temperature float64 `json:"temperature"`
+}
+
 type OllamaRequest struct {
-	Model  string `json:"model"`
-	Prompt string `json:"prompt"`
-	Stream bool   `json:"stream"`
+	Model   string        `json:"model"`
+	Prompt  string        `json:"prompt"`
+	Stream  bool          `json:"stream"`
+	Options OllamaOptions `json:"options"` // Enforce execution parameters (e.g., zero creativity)
 }
 
 type OllamaResponse struct {
@@ -80,21 +85,29 @@ func isOllamaHealthy(endpoint string) bool {
 func filterWithLocalLLM(endpoint, rawText string) (string, error) {
 	url := endpoint + "/api/generate"
 
-	prompt := fmt.Sprintf(`[SYSTEM] You are a local Data Loss Prevention (DLP) filter. 
-Task: Find and replace ALL passwords, API Keys, Tokens, Private Keys, and Public IPs in the following text with "[REDACTED_BY_LOCAL_AI]". 
-RETURN ONLY the redacted content. DO NOT explain, DO NOT greet, DO NOT add any extra formatting outside the requested output.
+	// Strict prompt to prevent the LLM from summarizing or hallucinating.
+	// Fixed the Go backtick escape issue by using "triple backticks" text.
+	prompt := fmt.Sprintf(`You are a strict Data Redaction pipeline.
+Your ONLY job is to output the EXACT same text you receive, but replace any Passwords, API Keys, or Private Keys with "[REDACTED]".
+CRITICAL RULES:
+1. If there are no secrets, you MUST return the original text EXACTLY as it is.
+2. DO NOT summarize the text. DO NOT skip any lines.
+3. DO NOT add explanations, greetings, or markdown blocks (like triple backticks).
 
-[DATA]:
+TEXT TO PROCESS:
 %s`, rawText)
 
 	reqBody := OllamaRequest{
 		Model:  "qwen2.5:3b",
 		Prompt: prompt,
 		Stream: false,
+		Options: OllamaOptions{
+			Temperature: 0.0, // Absolute zero creativity, mechanical execution only
+		},
 	}
 
 	jsonData, _ := json.Marshal(reqBody)
-	// Longer timeout (30s) for analyzing large text chunks
+	// 30s timeout to accommodate large text logs processing
 	client := http.Client{Timeout: 30 * time.Second}
 	resp, err := client.Post(url, "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
