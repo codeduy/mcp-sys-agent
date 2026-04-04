@@ -17,7 +17,7 @@ graph TD
         LocalLLM -->|"(6) Send data context<br>that hide sensitive info"| Agent
     end
 
-    %% Luồng giao tiếp bên ngoài và xuyên VPN
+    %% External and cross-VPN communication flow
     Client -->|"(1) Sending user request"| Gemini
     Gemini -->|"(2) Request context on VM's MCP server<br>based on user request"| Client
     Client -->|"(3) Request agent execute read command<br>for context collecting"| Agent
@@ -27,7 +27,7 @@ graph TD
     
     Gemini -->|"(7) Response recommend actions<br>based on user request"| Client
 
-    %% Đổ màu nền nhẹ cho dễ phân biệt
+    %% Background color
     style VPN fill:#f4f8ff,stroke:#333,stroke-width:2px
     style Outside fill:#fff5f5,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5
 ```
