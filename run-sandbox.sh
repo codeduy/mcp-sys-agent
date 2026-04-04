@@ -1,21 +1,25 @@
 #!/bin/bash
-# Tên file: run-safe.sh
-# Tác dụng: Bọc file mcp-agent vào lồng kính OS-Level (Full Filesystem, Kernel & Tmp Protection)
+# Filename: run-sandbox.sh
+# Purpose: Encapsulate the mcp-agent within an OS-Level Sandbox (Full Filesystem, Kernel & Tmp Protection)
 
 AGENT_PATH=$(realpath "$1")
 
 if [ ! -f "$AGENT_PATH" ]; then
-    echo "Lỗi: Không tìm thấy file $AGENT_PATH" >&2
+    echo "Error: File $AGENT_PATH not found" >&2
     exit 1
 fi
 
-# Bỏ qua tham số đầu tiên (đã nạp vào AGENT_PATH)
 shift 
 
-# Chạy Agent qua systemd-run với FULL CẤP BẢO MẬT
+# Virtual IP of LLM Server (Tailscale)
+TAILSCALE_AI_IP="100.80.20.10"
+
+# Execute the Agent via systemd-run with MAXIMUM SECURITY CONSTRAINTS
 sudo systemd-run \
     --description="MCP-DLP-Sandbox" \
     --pipe --wait --quiet \
+    -E ENABLE_LOCAL_LLM="1" \
+    -E LOCAL_LLM_ENDPOINT="http://${TAILSCALE_AI_IP}:11434" \
     -p DynamicUser=yes \
     -p ProtectSystem=strict \
     -p ProtectHome=read-only \
@@ -29,6 +33,7 @@ sudo systemd-run \
     -p PrivateDevices=yes \
     -p MemoryMax=512M \
     -p IPAddressDeny=any \
-    -p IPAddressAllow=localhost \
+    -p IPAddressAllow=127.0.0.0/8 \
+    -p IPAddressAllow="${TAILSCALE_AI_IP}" \
     -p CPUQuota=50% \
     "$AGENT_PATH" "$@"

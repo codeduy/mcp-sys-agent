@@ -7,11 +7,11 @@
                 "12345678",
                 "ssh",
                 "-p",
-                "2222",
+                "2002",
                 "-o",
                 "StrictHostKeyChecking=no",
                 "root@10.8.5.249",
-                "/opt/run-safe.sh /opt/mcp-rescue-linux"
+                "chmod +x /opt/run-sandbox.sh && /opt/run-sandbox.sh /opt/mcp-server-linux"
             ],
             "disabled": false
         },
@@ -22,11 +22,26 @@
                 "12345678",
                 "ssh",
                 "-p",
-                "2224",
+                "2004",
                 "-o",
                 "StrictHostKeyChecking=no",
                 "root@10.8.5.249",
-                "/opt/run-safe.sh /opt/mcp-rescue-linux"
+                "chmod +x /opt/run-sandbox.sh && /opt/run-sandbox.sh /opt/mcp-server-linux"
+            ],
+            "disabled": false
+        },
+        "a3": {
+            "command": "sshpass",
+            "args": [
+                "-p",
+                "12345678",
+                "ssh",
+                "-p",
+                "2012",
+                "-o",
+                "StrictHostKeyChecking=no",
+                "root@10.8.5.249",
+                "chmod +x /opt/run-sandbox.sh && /opt/run-sandbox.sh /opt/mcp-server-linux"
             ],
             "disabled": false
         }
