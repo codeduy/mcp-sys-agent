@@ -47,7 +47,7 @@ func StaticFilter(rawOutput string) string {
 	reWeirdAssignments := regexp.MustCompile(`(?i)([a-zA-Z0-9_-]+)\s*[:=]\s*([^\s\n\r]*?[!@#$%^&*][^\s\n\r]*)`)
 	cleanOutput = reWeirdAssignments.ReplaceAllString(cleanOutput, "$1 = [🔒 SPECIAL_CHAR_PASSWORD_REDACTED]")
 
-	reGenericSecret := regexp.MustCompile(`(?i)[a-z0-9_-]+[:=]\s*([^\s]{8,})`)
+	reGenericSecret := regexp.MustCompile(`(?i)([a-z0-9_-]+)[\s:=]+\s*([^\s]{8,})`)
 	cleanOutput = reGenericSecret.ReplaceAllString(cleanOutput, "$1 = [🔒 BLOCKED_PASSWORD]")
 
 	rePotentialSecrets := regexp.MustCompile(`\S{14,}`)
