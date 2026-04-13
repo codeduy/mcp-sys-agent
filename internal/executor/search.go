@@ -17,7 +17,7 @@ type SearxResult struct {
 	} `json:"results"`
 }
 
-func SearchInternet(query string) (string, error) {
+func SearchTechnicalKnowledge(query string) (string, error) {
 	// Replace with Tailscale IP that running SearxNG
 	const gatewayIP = "100.108.61.12"
 
@@ -44,7 +44,9 @@ func SearchInternet(query string) (string, error) {
 
 	var output string
 	for i, r := range data.Results {
-		if i >= 5 { break } // Get top 5 results
+		if i >= 5 {
+			break // Get top 5 results
+		}
 		output += fmt.Sprintf("[%d] %s\nURL: %s\nSnippet: %s\n\n", i+1, r.Title, r.URL, r.Content)
 	}
 	return output, nil
