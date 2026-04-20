@@ -29,9 +29,9 @@ graph TD
     Client -->|"(3) Request agent execute read command<br>for context collecting"| Agent
     
     Agent -.->|"(6)"| Client
-    Client -.->|"(6)"| Gemini
+    Client -.->|"(6)"| CloudLLM
     
-    Gemini -->|"(7) Response recommend actions<br>based on user request"| Client
+    CloudLLM -->|"(7) Response recommend actions<br>based on user request"| Client
 
     %% Background color
     style VPN fill:#f4f8ff,stroke:#333,stroke-width:2px
