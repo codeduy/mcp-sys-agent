@@ -8,10 +8,10 @@ To keep things safe, the agent only runs read-only commands inside a systemd san
 ```mermaid
 graph TD
     subgraph Outside ["Outside VPN"]
-        Gemini["Google LLM (Gemini)"]
+        CloudLLM["Cloud LLM<br>(Gemini, OpenAI, etc.)"]
     end
 
-    Client["MCP Client<br>(Google Antigravity)"]
+    Client["MCP Client<br>(Claude Desktop, Antigravity, etc.)"]
 
     subgraph VPN ["Inside Tailscale VPN"]
         Agent["run-sandbox.sh + MCP Server<br>(agent main.go)"]
@@ -19,13 +19,13 @@ graph TD
         LocalLLM["Local LLM"]
 
         Agent -->|"(4) Execute read command"| OS
-        Agent -->|"(5) Requesting hide sensitive info<br>before send to Google LLM"| LocalLLM
+        Agent -->|"(5) Requesting hide sensitive info<br>before send to Cloud LLM"| LocalLLM
         LocalLLM -->|"(6) Send data context<br>that hide sensitive info"| Agent
     end
 
     %% External and cross-VPN communication flow
-    Client -->|"(1) Sending user request"| Gemini
-    Gemini -->|"(2) Request context on VM's MCP server<br>based on user request"| Client
+    Client -->|"(1) Sending user request"| CloudLLM
+    CloudLLM -->|"(2) Request context on VM's MCP server<br>based on user request"| Client
     Client -->|"(3) Request agent execute read command<br>for context collecting"| Agent
     
     Agent -.->|"(6)"| Client
@@ -43,10 +43,10 @@ graph TD
 ## 🔄 Data Workflow
 ```mermaid
 sequenceDiagram
-    participant Client as MCP Client<br>(Google Antigravity)
+    participant Client as MCP Client<br>(Claude Desktop, Antigravity, etc.)
     
     box Outside VPN
-        participant Gemini as Google LLM<br>(Gemini)
+        participant CloudLLM as Cloud LLM<br>(Gemini, OpenAI, etc.)
     end
     
     box rgb(244, 248, 255) Inside Tailscale VPN
@@ -55,14 +55,14 @@ sequenceDiagram
         participant LocalLLM as Local LLM
     end
 
-    Client->>Gemini: (1) Sending user request
-    Gemini-->>Client: (2) Request context on VM's MCP server
+    Client->>CloudLLM: (1) Sending user request
+    CloudLLM-->>Client: (2) Request context on VM's MCP server
     Client->>Agent: (3) Request agent execute read command
     Agent->>OS: (4) Execute read command
     Note right of Agent: Gather raw logs/configs
     Agent->>LocalLLM: (5) Request hide sensitive info (DLP)
     LocalLLM-->>Agent: (6) Send safe data context
     Agent-->>Client: (6) Return safe context over Tailscale
-    Client->>Gemini: (6) Forward safe context
-    Gemini-->>Client: (7) Response recommend actions
+    Client->>CloudLLM: (6) Forward safe context
+    CloudLLM-->>Client: (7) Response recommend actions
 ```
