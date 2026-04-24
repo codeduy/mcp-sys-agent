@@ -66,3 +66,34 @@ sequenceDiagram
     Client->>CloudLLM: (6) Forward safe context
     CloudLLM-->>Client: (7) Response recommend actions
 ```
+
+## 🗺️ Roadmap
+
+```mermaid
+%%{init: { 'theme': 'base', 'themeVariables': { 'cScale0': '#3b82f6', 'cScale1': '#8b5cf6', 'cScale2': '#ec4899', 'cScale3': '#f97316' } } }%%
+timeline
+    Phase 1 (Now)
+        : Foundation
+        : Core Linux Read-Only Agent
+        : Tailscale VPN Integration
+        : Basic DLP via Local LLM
+        
+    Phase 2 (Next)
+        : Cloud Native & Cross-Platform
+        : Windows Agent Support
+        : Kubernetes DaemonSet/Sidecar
+        : Cloud Provider APIs (AWS/GCP/Azure)
+        : Hybrid DLP Engine
+        
+    Phase 3 (Later)
+        : Automation & Remediation
+        : Ansible / Terraform Integration
+        : Human-in-the-loop Execution
+        : Pre-approved Safe Actions
+        
+    Phase 4 (Future)
+        : Enterprise Fleet Management
+        : Fleet Server Control Plane
+        : Fleet Proxy for VPCs
+        : OpenTelemetry & Proactive Alerts
+```
