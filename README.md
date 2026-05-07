@@ -87,7 +87,7 @@ timeline
         
     Phase 3 (Later)
         : Automation & Remediation
-        : RAG for Internal Runbooks
+        : RAG/LLM-Wiki for Internal Runbooks
         : Ansible / Terraform Integration
         : Human-in-the-loop Execution
         : Pre-approved Safe Actions
